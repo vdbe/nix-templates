@@ -1,0 +1,35 @@
+# One CLI to format the code tree - https://github.com/numtide/treefmt
+
+[formatter.nix]
+command = "sh"
+options = ["-eucx", """
+  deadnix --edit "$@"
+  echo "$@" | statix fix
+  nixpkgs-fmt "$@"
+  """, "--"]
+includes = ["*.nix"]
+excludes = []
+
+[formatter.toml]
+command = "sh"
+options = ["-eucx", """
+taplo lint -- "$@" 
+taplo format -- "$@" 
+    """, "--"]
+includes = ["*.toml"]
+excludes = []
+
+[formatter.shell]
+command = "sh"
+options = ["-eucx", """
+shellcheck --external-sources "$@"
+shfmt "$@"
+    """, "--"]
+includes = ["*.sh"]
+excludes = []
+
+[formatter.prettier]
+command = "prettier"
+options = ["--write"]
+includes = ["*.yml", "*.yaml", ".github/actions/*.yml"]
+excludes = []
