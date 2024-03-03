@@ -1,7 +1,7 @@
 { inputs, ... }: {
   imports = [ inputs.pre-commit-hooks.flakeModule ];
 
-  perSystem = { config, pkgs, ... }:
+  perSystem = { self', config, pkgs, ... }:
     let
       treefmtRuntimeInputs = with pkgs; [
         treefmt
@@ -41,6 +41,8 @@
           nixd
           yaml-language-server
         ]);
+
+        inputsFrom = builtins.attrValues (self'.packages or [ ]);
       };
 
       formatter = treefmtWrapper;
@@ -69,7 +71,5 @@
       };
     };
 }
-
-
 
 

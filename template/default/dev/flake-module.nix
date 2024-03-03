@@ -1,7 +1,7 @@
 { inputs, ... }: {
   imports = [ inputs.pre-commit-hooks.flakeModule ];
 
-  perSystem = { config, pkgs, ... }:
+  perSystem = { self', config, pkgs, ... }:
     let
       treefmtRuntimeInputs = with pkgs; [
         treefmt
@@ -24,6 +24,8 @@
 
         nativeBuildInputs = treefmtRuntimeInputs ++ (with pkgs; [
         ]);
+
+        inputsFrom = builtins.attrValues (self'.packages or [ ]);
       };
 
       formatter = treefmtWrapper;
