@@ -1,3 +1,6 @@
+# rust
+/target
+
 # nix
 result
 result-*
@@ -9,5 +12,3 @@ result-*
 .direnv/
 .envrc
 
-# template lockfiles
-template/*/flake.lock

@@ -51,7 +51,13 @@
               A minimal flake with devshell, pre-commit, github workflow and
               formatter.
             '';
-
+          };
+          rust = {
+            path = ./template/rust;
+            description = ''
+              A rust flake with devshell, pre-commit, github check workflow and
+              formatter.
+            '';
           };
         };
 
