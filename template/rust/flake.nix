@@ -20,6 +20,8 @@
     pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
     pre-commit-hooks.inputs.nixpkgs-stable.follows = "nixpkgs";
 
+    treefmt-nix.url = "github:numtide/treefmt-nix";
+    treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
 
     rust-overlay.url = "github:oxalica/rust-overlay";
     rust-overlay.flake = false;

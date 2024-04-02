@@ -1,46 +1,52 @@
 { inputs, ... }: {
-  imports = [ inputs.pre-commit-hooks.flakeModule ];
+  imports = [
+    inputs.pre-commit-hooks.flakeModule
+    inputs.treefmt-nix.flakeModule
+  ];
 
-  perSystem = { self', config, pkgs, ... }:
-    let
-      treefmtRuntimeInputs = with pkgs; [
-        treefmt
-      ];
-
-      treefmtWrapper = pkgs.writeShellApplication {
-        name = "treefmt";
-        runtimeInputs = treefmtRuntimeInputs;
-        text =
-          ''
-            exec treefmt "$@"
-          '';
-      };
-    in
+  perSystem = { self', config, pkgs, lib, ... }:
     {
       devShells.default = pkgs.mkShell {
         shellHook = ''
           ${config.pre-commit.installationScript}
         '';
 
-        nativeBuildInputs = treefmtRuntimeInputs ++ (with pkgs; [
-        ]);
+        packages = with pkgs; [
+          self'.formatter
+        ];
 
         inputsFrom = builtins.attrValues (self'.packages or [ ]);
       };
 
-      formatter = treefmtWrapper;
+      treefmt = {
+        projectRootFile = "flake.nix";
+        programs = {
+          mdsh.enable = true;
+        };
+      };
 
       pre-commit = {
         check.enable = true;
 
         settings = {
           excludes = [ "flake.lock" ];
-          settings.treefmt.package = treefmtWrapper;
 
           hooks = {
-            treefmt.enable = true;
+            treefmt = {
+              enable = false;
+              package = self'.formatter;
+            };
           };
         };
       };
+
+      formatter = config.treefmt.build.wrapper;
+
+      checks =
+        let
+          packages = lib.mapAttrs' (n: lib.nameValuePair "package-${n}") self'.packages;
+          devShells = lib.mapAttrs' (n: lib.nameValuePair "devShell-${n}") self'.devShells;
+        in
+        packages // devShells;
     };
 }

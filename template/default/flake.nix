@@ -19,6 +19,9 @@
     pre-commit-hooks.inputs.flake-utils.follows = "flake-utils";
     pre-commit-hooks.inputs.nixpkgs.follows = "nixpkgs";
     pre-commit-hooks.inputs.nixpkgs-stable.follows = "nixpkgs";
+
+    treefmt-nix.url = "github:numtide/treefmt-nix";
+    treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs@{ systems, flake-parts, ... }:
